@@ -1,0 +1,49 @@
+﻿@page "/Displaylager"
+@inject ILagerRepository lagerRepository
+@inject NavigationManager Navigation
+
+
+<h3>Lager oversigt</h3>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Varetekst</th>
+            <th>Varenummer</th>
+        </tr>
+    </thead>
+   
+        
+    @foreach (var item in data.Skip(data.Count - 10))
+    { 
+        <tbody>
+            <tr>
+                <td>@item.vareTekst</td>
+                <td>@item.vareNummer</td>
+            </tr>
+           
+        </tbody>
+    }
+    
+</table>
+
+<button class="btn btn-primary" @onclick="NavigateToOtherPage">Opret Varenummer</button>
+
+
+@code {
+    
+    private List<Lager_Data> data = new();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        // Din initialiseringslogik her
+        data = await lagerRepository.GetAllItemsAsync();
+
+    }
+
+    private void NavigateToOtherPage()
+    {
+        Navigation.NavigateTo("/opretvarenummer");
+    }
+
+}
