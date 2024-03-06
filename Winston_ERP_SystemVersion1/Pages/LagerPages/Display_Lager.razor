@@ -14,7 +14,7 @@
     </thead>
    
         
-    @foreach (var item in data.Skip(data.Count - 10))
+    @foreach (var item in sorteretLagerliste)
     { 
         <tbody>
             <tr>
@@ -31,14 +31,16 @@
 
 
 @code {
-    
+
     private List<Lager_Data> data = new();
-    
+    private List<Lager_Data> sorteretLagerliste = new();
+
     protected override async Task OnInitializedAsync()
     {
         // Din initialiseringslogik her
         data = await lagerRepository.GetAllItemsAsync();
-
+        sorteretLagerliste = data.OrderBy(p => p.vareNummer).ToList();
+        
     }
 
     private void NavigateToOtherPage()
