@@ -1,0 +1,59 @@
+﻿@page "/Opslaavarenummer"
+@inject ILagerRepository lagerRepository
+@inject NavigationManager Navigation
+
+
+<h3>OpslaVareNummer</h3>
+
+<div>
+    <input type="text" @bind="varenummer" placeholder="Indtast varenummer">
+    <button @onclick="SøgEfterVarenummer">Søg</button>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Varetekst</th>
+            <th>Varenummer</th>
+        </tr>
+    </thead>
+
+
+    @foreach (var item in fundenvarenummer)
+    {
+        <tbody>
+            <tr>
+                <td>@item.vareTekst</td>
+                <td>@item.vareNummer</td>
+            </tr>
+
+        </tbody>
+    }
+
+</table>
+
+@code {
+    private List<Lager_Data> data = new List<Lager_Data>();
+    private List<Lager_Data> fundenvarenummer = new List<Lager_Data>();
+    public string varenummer { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Din initialiseringslogik her
+        data = await lagerRepository.GetAllItemsAsync();
+        //fundenvarenummer = data.FindAll(p => p.vareNummer == "3"); // Erstat "DitVarenummer" med det ønskede varenummer
+                                                                   // sorteretLagerliste = data.OrderBy(p => p.vareNummer).ToList();
+
+    }
+
+    private void NavigateToOtherPage()
+    {
+        Navigation.NavigateTo("/opretvarenummer");
+    }
+
+    private void SøgEfterVarenummer()
+    {
+        fundenvarenummer = data.FindAll(p => p.vareNummer == varenummer); // Erstat "DitVarenummer" med det ønskede varenummer
+    }
+}
+
